@@ -1,0 +1,2 @@
+# WpfApplicationStoreAuto
+Autogestion Tiendas
