@@ -2,6 +2,10 @@
 
 This is an application to manage a system of task requests, the requests are sent to an API and the administration software is in charge of approving, denying or closing the task. If the task is approved it can be executed. The application has alerts in case the task status changes, it also has the ability to receive a message from the administration by task status.
 
+[WEB SERVICE APPI](https://github.com/aurquiel/WebApplicationStoreAuto)
+
+[ADMIN APP](https://github.com/aurquiel/WpfApplicationStoreAutoOffice)
+
 ---
 
 ## Login
@@ -14,12 +18,12 @@ This is an application to manage a system of task requests, the requests are sen
 
 ## Pending Task
 
-![main|800x750](docs/img/pending.PNG)
+![pending|800x750](docs/img/pending.PNG)
 
 ## Notification Task
 
-![main](docs/img/warning.PNG)
+![notifiaction](docs/img/notification.PNG)
 
 ## Aprove Task
 
-![main|800x750](docs/img/approve.PNG)
+![aprove|800x750](docs/img/aprove.PNG)
