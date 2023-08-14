@@ -831,5 +831,61 @@ namespace MySQLClassLibrary
                 }
             }
         }
+
+        public async Task<Tuple<bool, string>> SetIva(string articles)
+        {
+            string failures = string.Empty;
+            using (MySqlConnection mysqlConnection = new MySqlConnection(GetSettingsConenction()))
+            {
+                try
+                {
+                    await mysqlConnection.OpenAsync();
+                    MySqlCommand command = new MySqlCommand("update articulo set iva='.16', ivaTipo='0' where codigo in (" + articles + ");", mysqlConnection);
+                    command.CommandTimeout = SQL_TIMEOUT_EXECUTION_COMMAND;
+                    int result = await command.ExecuteNonQueryAsync();
+                    await mysqlConnection.CloseAsync();
+                    if (result <= 0)
+                    {
+                        Logger.WriteToLog("Error: Operacion fijar iva de articulos.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteToLog("Metodo: " + ex.TargetSite + ", Error: " + ex.Message.ToLower());
+                    return new Tuple<bool, string>(false, "Error, operacion base de datos fallida. Excepcion: " + ex.Message.ToLower());
+                }
+            }
+
+
+            return new Tuple<bool, string>(true, "Operacion exitosa.");
+        }
+
+        public async Task<Tuple<bool, string>> SetExento(string articles)
+        {
+            string failures = string.Empty;
+            using (MySqlConnection mysqlConnection = new MySqlConnection(GetSettingsConenction()))
+            {
+                try
+                {
+                    await mysqlConnection.OpenAsync();
+                    MySqlCommand command = new MySqlCommand("update articulo set iva = '0.0', ivaTipo = '3' where codigo in (" + articles + ");", mysqlConnection);
+                    command.CommandTimeout = SQL_TIMEOUT_EXECUTION_COMMAND;
+                    int result = await command.ExecuteNonQueryAsync();
+                    await mysqlConnection.CloseAsync();
+                    if (result <= 0)
+                    {
+                        Logger.WriteToLog("Error: Operacion fijar exento de articulos.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteToLog("Metodo: " + ex.TargetSite + ", Error: " + ex.Message.ToLower());
+                    return new Tuple<bool, string>(false, "Error, operacion base de datos fallida. Excepcion: " + ex.Message.ToLower());
+                }
+            }
+
+
+            return new Tuple<bool, string>(true, "Operacion exitosa.");
+        }
     }
 }

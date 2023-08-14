@@ -1125,7 +1125,7 @@
                                                 <ColumnDefinition Width="100"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox x:Name="textBoxUploadTextUpdateCategoriesPerArticles" Grid.Row="0" Grid.Column="0" Margin="4,4,4,4" HorizontalAlignment="Stretch" IsReadOnly="true"/>
-                                            <Button x:Name="buttonUploadTextUpdateCategoriesPerArticles" Grid.Row="0" Grid.Column="1" Content="Cargar Archivo" Margin="4,4,4,4" HorizontalAlignment="Right" Click="buttonUploadTextUpdateCategoriesPerArticles_Click"/>
+                                            <Button x:Name="buttonUploadTextUpdateCategoriesPerArticles" Grid.Row="0" Grid.Column="1" Content="Cargar Archivo" Margin="0,4,4,0" HorizontalAlignment="Right" Click="buttonUploadTextUpdateCategoriesPerArticles_Click" Height="22" VerticalAlignment="Top"/>
                                         </Grid>
 
                                         <Label Content="Estatus de solicitud:" Margin="0,2,0,2" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
@@ -1257,6 +1257,108 @@
                                     Foreground="Black"
                                     FontFamily="Arial"
                                     FontWeight="Bold" Click="buttonExecuteGlobalDiscountPerCategories_Click"/>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox x:Name="groupBox24" Tag="24">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" FlowDirection="LeftToRight">
+                                        <TextBlock Text="Tarea 24" Tag="24" FontWeight="Bold" Foreground="Red"/>
+                                        <TextBlock Text=" - Actualizar artículos para que tengan iva" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <StackPanel Margin="0" Orientation="Vertical" Height="125" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="White">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Content="Ruta Archivo:" Grid.Row="0" Grid.Column="0" Margin="0,2,0,2" Grid.ColumnSpan="2"/>
+                                        <Grid Grid.Row="0" Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="100"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox x:Name="textBoxUploadTextSetIva" Grid.Row="0" Grid.Column="0" Margin="4,4,4,4" HorizontalAlignment="Stretch" IsReadOnly="true"/>
+                                            <Button x:Name="buttonUploadTextSetIva" Grid.Row="0" Grid.Column="1" Content="Cargar Archivo" Margin="4,4,4,4" HorizontalAlignment="Right" Click="buttonUploadTextSetIva_Click"/>
+                                        </Grid>
+
+                                        <Label Content="Estatus de solicitud:" Margin="0,2,0,2" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <Label x:Name="labelStatusSetIva"  Margin="0,2,0,2" Content="----------" FontWeight="Bold" Grid.Row="1" Grid.Column="2"/>
+                                        <Label Content="Mensaje de Soporte:" Margin="0,2,0,2" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <Label x:Name="labelMessageSetIva"  Margin="0,2,0,2" Content="----------" FontWeight="Bold" Grid.Row="2" Grid.Column="2"/>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35"/>
+                                        </Grid.RowDefinitions>
+                                        <Button x:Name="buttonSolicitudeSetIva" Template="{StaticResource ButtonIsEnable}" Content="Solicitar" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Top" Width="75"  Height="30"  ToolTip="Solicitar Tarea"
+                                    Background="WhiteSmoke"
+                                    Foreground="Black"
+                                    FontFamily="Arial"
+                                    FontWeight="Bold" Click="buttonSolicitudeSetIva_Click"/>
+                                        <Button x:Name="buttonExecuteSetIva" Template="{StaticResource ButtonIsEnable}" Content="Ejecutar" IsEnabled="false" HorizontalAlignment="Left" Margin="90,0,0,0" VerticalAlignment="Top" Width="75"  Height="30"  ToolTip="Ejecutar Tarea"
+                                    Background="WhiteSmoke"
+                                    Foreground="Black"
+                                    FontFamily="Arial"
+                                    FontWeight="Bold" Click="buttonExecuteSetIva_Click"/>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox x:Name="groupBox25" Tag="25">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" FlowDirection="LeftToRight">
+                                        <TextBlock Text="Tarea 25" Tag="25" FontWeight="Bold" Foreground="Red"/>
+                                        <TextBlock Text=" - Actualizar artículos para que sean exentos" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <StackPanel Margin="0" Orientation="Vertical" Height="125" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightBlue">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Content="Ruta Archivo:" Grid.Row="0" Grid.Column="0" Margin="0,2,0,2" Grid.ColumnSpan="2"/>
+                                        <Grid Grid.Row="0" Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="100"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox x:Name="textBoxUploadTextSetExento" Grid.Row="0" Grid.Column="0" Margin="4,4,4,4" HorizontalAlignment="Stretch" IsReadOnly="true"/>
+                                            <Button x:Name="buttonUploadTextSetExento" Grid.Row="0" Grid.Column="1" Content="Cargar Archivo" Margin="4,4,4,4" HorizontalAlignment="Right" Click="buttonUploadTextSetExento_Click"/>
+                                        </Grid>
+
+                                        <Label Content="Estatus de solicitud:" Margin="0,2,0,2" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <Label x:Name="labelStatusSetExento"  Margin="0,2,0,2" Content="----------" FontWeight="Bold" Grid.Row="1" Grid.Column="2"/>
+                                        <Label Content="Mensaje de Soporte:" Margin="0,2,0,2" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <Label x:Name="labelMessageSetExento"  Margin="0,2,0,2" Content="----------" FontWeight="Bold" Grid.Row="2" Grid.Column="2"/>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35"/>
+                                        </Grid.RowDefinitions>
+                                        <Button x:Name="buttonSolicitudeSetExento" Template="{StaticResource ButtonIsEnable}" Content="Solicitar" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Top" Width="75"  Height="30"  ToolTip="Solicitar Tarea"
+                                    Background="WhiteSmoke"
+                                    Foreground="Black"
+                                    FontFamily="Arial"
+                                    FontWeight="Bold" Click="buttonSolicitudeSetExento_Click"/>
+                                        <Button x:Name="buttonExecuteSetExento" Template="{StaticResource ButtonIsEnable}" Content="Ejecutar" IsEnabled="false" HorizontalAlignment="Left" Margin="90,0,0,0" VerticalAlignment="Top" Width="75"  Height="30"  ToolTip="Ejecutar Tarea"
+                                    Background="WhiteSmoke"
+                                    Foreground="Black"
+                                    FontFamily="Arial"
+                                    FontWeight="Bold" Click="buttonExecuteSetExento_Click"/>
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>

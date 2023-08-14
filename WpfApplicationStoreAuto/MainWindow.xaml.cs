@@ -1658,6 +1658,140 @@ namespace WpfApplicationStoreAuto
             }
         }
 
+        private void buttonUploadTextSetIva_Click(object sender, RoutedEventArgs e)
+        {
+            string pathFile = FilesManager.GetPathFileDialog();
+            if (!string.IsNullOrEmpty(pathFile))
+            {
+                textBoxUploadTextSetIva.Text = pathFile;
+            }
+        }
+
+        private async void buttonSolicitudeSetIva_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxUploadTextSetIva.Text))
+            {
+                System.Windows.MessageBox.Show("Error debe seleccionar un archivo.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Tuple<bool, string> result = FilesManager.GetArticlesFromFileArticleByLine(textBoxUploadTextSetIva.Text, FilesManager.ListOfArticlesSetIva);
+                if (result.Item1 == false)
+                {
+                    textBoxUploadTextSetIva.Text = string.Empty;
+                    System.Windows.MessageBox.Show(result.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    ((System.Windows.Controls.Button)sender).IsEnabled = false;
+                    buttonUploadTextSetIva.IsEnabled = false;
+                    System.Windows.Controls.GroupBox groupBoxUpper = FindUpVisualTree<System.Windows.Controls.GroupBox>((System.Windows.Controls.Button)sender);
+                    string description = ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[1]).Text.Replace(" - ", "") + ". Cantidad de Articulos: " + FilesManager.ListOfArticlesSetIva.Count;
+                    NetworkClassLibrary.Models.TaskModel taskModel = new NetworkClassLibrary.Models.TaskModel(initialData.StoreEmployee.data[0].stremp_store_id, initialData.StoreEmployee.data[0].stremp_id, (int)Tasks.EnumTaskStatusTask.PENDIENTE,
+                                                                                                        string.Empty, DateTime.Now, description, string.Empty, (int)Tasks.EnumTaskStatusLocal.NONE, string.Empty, 1, DateTime.Now, false);
+
+                    Tuple<bool, string, NetworkClassLibrary.Models.TaskAnswerModel> result3 = await NetworkClassLibrary.Post.InsertTask(initialData.IP_WEB_SERVICE + "/api/Task/MakeTask", taskModel);
+                    if (result3.Item1 && result3.Item3.statusOperation)
+                    {
+                        if ((string)labelStatusSetIva.Content == Tasks.EnumTaskStatusTask.DENEGADA.ToString())
+                        {
+                            UpdateTabCounter(Tasks.EnumTaskStatusTask.DENEGADA, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                            QuickNavigationDenied(new MyDataComboBox((string)groupBoxUpper.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                        }
+                        UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.ADD);
+                        UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.PENDIENTE, System.Windows.Media.Brushes.DarkOrange);
+                        UpdateLabelStatusModeratorMessage(labelMessageSetIva, MODERATOR_MESSAGE_EMPTY);
+                        ListOfTask.TasksQueue.Enqueue(new Tasks(result3.Item3.data, string.Empty, string.Empty, Tasks.EnumTaskStatusTask.PENDIENTE, Tasks.EnumTaskGroup.SET_IVA, groupBoxUpper));
+                        ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[1]).Text.Replace(" - ", ""), Tasks.EnumTaskStatusTask.PENDIENTE);
+                    }
+                    else
+                    {
+                        ((System.Windows.Controls.Button)sender).IsEnabled = true;
+                        buttonUploadTextSetIva.IsEnabled = true;
+                        textBoxUploadTextSetIva.Text = string.Empty;
+                        FilesManager.ListOfArticlesSetIva.Clear();
+                        UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                        UpdateLabelStatusModeratorMessage(labelMessageSetIva, MODERATOR_MESSAGE_EMPTY);
+                        if (result3.Item3.statusOperation == false)
+                        {
+                            System.Windows.MessageBox.Show(result3.Item3.message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show(result3.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void buttonUploadTextSetExento_Click(object sender, RoutedEventArgs e)
+        {
+            string pathFile = FilesManager.GetPathFileDialog();
+            if (!string.IsNullOrEmpty(pathFile))
+            {
+                textBoxUploadTextSetExento.Text = pathFile;
+            }
+        }
+
+        private async void buttonSolicitudeSetExento_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxUploadTextSetExento.Text))
+            {
+                System.Windows.MessageBox.Show("Error debe seleccionar un archivo.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Tuple<bool, string> result = FilesManager.GetArticlesFromFileArticleByLine(textBoxUploadTextSetExento.Text, FilesManager.ListOfArticlesSetExento);
+                if (result.Item1 == false)
+                {
+                    textBoxUploadTextSetExento.Text = string.Empty;
+                    System.Windows.MessageBox.Show(result.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    ((System.Windows.Controls.Button)sender).IsEnabled = false;
+                    buttonUploadTextSetExento.IsEnabled = false;
+                    System.Windows.Controls.GroupBox groupBoxUpper = FindUpVisualTree<System.Windows.Controls.GroupBox>((System.Windows.Controls.Button)sender);
+                    string description = ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[1]).Text.Replace(" - ", "") + ". Cantidad de Articulos: " + FilesManager.ListOfArticlesSetExento.Count;
+                    NetworkClassLibrary.Models.TaskModel taskModel = new NetworkClassLibrary.Models.TaskModel(initialData.StoreEmployee.data[0].stremp_store_id, initialData.StoreEmployee.data[0].stremp_id, (int)Tasks.EnumTaskStatusTask.PENDIENTE,
+                                                                                                        string.Empty, DateTime.Now, description, string.Empty, (int)Tasks.EnumTaskStatusLocal.NONE, string.Empty, 1, DateTime.Now, false);
+
+                    Tuple<bool, string, NetworkClassLibrary.Models.TaskAnswerModel> result3 = await NetworkClassLibrary.Post.InsertTask(initialData.IP_WEB_SERVICE + "/api/Task/MakeTask", taskModel);
+                    if (result3.Item1 && result3.Item3.statusOperation)
+                    {
+                        if ((string)labelStatusSetExento.Content == Tasks.EnumTaskStatusTask.DENEGADA.ToString())
+                        {
+                            UpdateTabCounter(Tasks.EnumTaskStatusTask.DENEGADA, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                            QuickNavigationDenied(new MyDataComboBox((string)groupBoxUpper.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                        }
+                        UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.ADD);
+                        UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.PENDIENTE, System.Windows.Media.Brushes.DarkOrange);
+                        UpdateLabelStatusModeratorMessage(labelMessageSetExento, MODERATOR_MESSAGE_EMPTY);
+                        ListOfTask.TasksQueue.Enqueue(new Tasks(result3.Item3.data, string.Empty, string.Empty, Tasks.EnumTaskStatusTask.PENDIENTE, Tasks.EnumTaskGroup.SET_EXENTO, groupBoxUpper));
+                        ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)groupBoxUpper.Header).Children[1]).Text.Replace(" - ", ""), Tasks.EnumTaskStatusTask.PENDIENTE);
+                    }
+                    else
+                    {
+                        ((System.Windows.Controls.Button)sender).IsEnabled = true;
+                        buttonUploadTextSetExento.IsEnabled = true;
+                        textBoxUploadTextSetExento.Text = string.Empty;
+                        FilesManager.ListOfArticlesSetExento.Clear();
+                        UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                        UpdateLabelStatusModeratorMessage(labelMessageSetExento, MODERATOR_MESSAGE_EMPTY);
+                        if (result3.Item3.statusOperation == false)
+                        {
+                            System.Windows.MessageBox.Show(result3.Item3.message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show(result3.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+            }
+        }
+
         //Ciclo infinito para procesar las tareas en cola
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -2777,6 +2911,98 @@ namespace WpfApplicationStoreAuto
                 decimalUpDownGlobalDiscountPerCategories.Value = 0;
                 listBoxGlobalDiscountPerCategories.IsEnabled = true;
                 listBoxGlobalDiscountPerCategories.UnselectAll();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_IVA && task.Status == Tasks.EnumTaskStatusTask.APROBADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.APROBADA);
+                QuickNavigationAproved(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.APROBADA, OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.APROBADA, System.Windows.Media.Brushes.Green);
+                UpdateLabelStatusModeratorMessage(labelMessageSetIva, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonExecuteSetIva.Tag = task;
+                buttonExecuteSetIva.IsEnabled = true;
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_IVA && task.Status == Tasks.EnumTaskStatusTask.DENEGADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.DENEGADA);
+                QuickNavigationDenied(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.DENEGADA, OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.DENEGADA, System.Windows.Media.Brushes.Red);
+                UpdateLabelStatusModeratorMessage(labelMessageSetIva, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetIva.IsEnabled = true;
+                textBoxUploadTextSetIva.Text = string.Empty;
+                buttonUploadTextSetIva.IsEnabled = true;
+                FilesManager.ListOfArticlesSetIva.Clear();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_IVA && task.Status == Tasks.EnumTaskStatusTask.CERRADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.CERRADA);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.CERRADA, System.Windows.Media.Brushes.Black);
+                UpdateLabelStatusModeratorMessage(labelMessageSetIva, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetIva.IsEnabled = true;
+                textBoxUploadTextSetIva.Text = string.Empty;
+                buttonUploadTextSetIva.IsEnabled = true;
+                FilesManager.ListOfArticlesSetIva.Clear();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_IVA && task.Status == Tasks.EnumTaskStatusTask.ERROR)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.ERROR);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                UpdateLabelStatusModeratorMessage(labelMessageSetIva, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetIva.IsEnabled = true;
+                textBoxUploadTextSetIva.Text = string.Empty;
+                buttonUploadTextSetIva.IsEnabled = true;
+                FilesManager.ListOfArticlesSetIva.Clear();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_EXENTO && task.Status == Tasks.EnumTaskStatusTask.APROBADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.APROBADA);
+                QuickNavigationAproved(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.APROBADA, OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.APROBADA, System.Windows.Media.Brushes.Green);
+                UpdateLabelStatusModeratorMessage(labelMessageSetExento, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonExecuteSetExento.Tag = task;
+                buttonExecuteSetExento.IsEnabled = true;
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_EXENTO && task.Status == Tasks.EnumTaskStatusTask.DENEGADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.DENEGADA);
+                QuickNavigationDenied(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.DENEGADA, OPERATIONS_ADD_SUBTRAC.ADD);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.DENEGADA, System.Windows.Media.Brushes.Red);
+                UpdateLabelStatusModeratorMessage(labelMessageSetExento, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetExento.IsEnabled = true;
+                textBoxUploadTextSetExento.Text = string.Empty;
+                buttonUploadTextSetExento.IsEnabled = true;
+                FilesManager.ListOfArticlesSetExento.Clear();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_EXENTO && task.Status == Tasks.EnumTaskStatusTask.CERRADA)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.CERRADA);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.CERRADA, System.Windows.Media.Brushes.Black);
+                UpdateLabelStatusModeratorMessage(labelMessageSetExento, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetExento.IsEnabled = true;
+                textBoxUploadTextSetExento.Text = string.Empty;
+                buttonUploadTextSetExento.IsEnabled = true;
+                FilesManager.ListOfArticlesSetExento.Clear();
+            }
+            else if (task.Group == Tasks.EnumTaskGroup.SET_EXENTO && task.Status == Tasks.EnumTaskStatusTask.ERROR)
+            {
+                ShowNotification(((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[1]).Text.Trim('-').Trim(), Tasks.EnumTaskStatusTask.ERROR);
+                UpdateTabCounter(Tasks.EnumTaskStatusTask.PENDIENTE, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+                UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                UpdateLabelStatusModeratorMessage(labelMessageSetExento, string.IsNullOrWhiteSpace(task.ModeratorMessage) ? MODERATOR_MESSAGE_EMPTY : task.ModeratorMessage);
+                buttonSolicitudeSetExento.IsEnabled = true;
+                textBoxUploadTextSetExento.Text = string.Empty;
+                buttonUploadTextSetExento.IsEnabled = true;
+                FilesManager.ListOfArticlesSetExento.Clear();
             }
         }
 
@@ -4182,6 +4408,126 @@ namespace WpfApplicationStoreAuto
             UpdateLabelStatusModeratorMessage(labelMessageGlobalDiscountPerCategories, MODERATOR_MESSAGE_EMPTY);
         }
 
+        private async void buttonExecuteSetIva_Click(object sender, RoutedEventArgs e)
+        {
+            ((System.Windows.Controls.Button)sender).IsEnabled = false;
+            UpdateTabCounter(Tasks.EnumTaskStatusTask.APROBADA, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+            Tasks task = (Tasks)((System.Windows.Controls.Button)sender).Tag;
+            QuickNavigationAproved(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+            Tuple<bool, string, NetworkClassLibrary.Models.TaskStatusAnswerModel> resultSetStatus;
+
+            Tuple<bool, string> tokenResult = NetworkClassLibrary.Token.IsTokenAlive(task.Token);
+
+            if (tokenResult.Item1)
+            {
+                Tuple<bool, string> result = await mysql.SetIva(FilesManager.GetArticlesQuotesAndCommas(FilesManager.ListOfArticlesSetIva));
+
+                if (result.Item1)
+                {
+                    resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.EXITOSA, task_status_local_message = result.Item2 });
+                    System.Windows.MessageBox.Show("Tarea Ejecutada Exitosamente", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = result.Item2 });
+                    System.Windows.MessageBox.Show(result.Item2, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (resultSetStatus.Item1)
+                {
+                    UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.CERRADA, System.Windows.Media.Brushes.Black);
+                }
+                else
+                {
+                    Logger.WriteToLog(resultSetStatus.Item2);
+                    UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                    System.Windows.MessageBox.Show("Error al cerrar la tarea, " + resultSetStatus.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                UpdateLabelStatus(labelStatusSetIva, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+
+                resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = tokenResult.Item2 });
+
+                if (resultSetStatus.Item1)
+                {
+                    System.Windows.MessageBox.Show(tokenResult.Item2 + " Tarea cerrada", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(tokenResult.Item2 + " Adicionalmente Error al cerrar la tarea: " + resultSetStatus.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger.WriteToLog(resultSetStatus.Item2);
+                }
+            }
+
+            buttonSolicitudeSetIva.IsEnabled = true;
+            textBoxUploadTextSetIva.Text = string.Empty;
+            buttonUploadTextSetIva.IsEnabled = true;
+            FilesManager.ListOfArticlesSetIva.Clear();
+            UpdateLabelStatusModeratorMessage(labelMessageSetIva, MODERATOR_MESSAGE_EMPTY);
+        }
+
+        private async void buttonExecuteSetExento_Click(object sender, RoutedEventArgs e)
+        {
+            ((System.Windows.Controls.Button)sender).IsEnabled = false;
+            UpdateTabCounter(Tasks.EnumTaskStatusTask.APROBADA, OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+            Tasks task = (Tasks)((System.Windows.Controls.Button)sender).Tag;
+            QuickNavigationAproved(new MyDataComboBox((string)task.GroupBox.Tag, ((System.Windows.Controls.TextBlock)((System.Windows.Controls.StackPanel)task.GroupBox.Header).Children[0]).Text), OPERATIONS_ADD_SUBTRAC.SUBTRAC);
+            Tuple<bool, string, NetworkClassLibrary.Models.TaskStatusAnswerModel> resultSetStatus;
+
+            Tuple<bool, string> tokenResult = NetworkClassLibrary.Token.IsTokenAlive(task.Token);
+
+            if (tokenResult.Item1)
+            {
+                Tuple<bool, string> result = await mysql.SetExento(FilesManager.GetArticlesQuotesAndCommas(FilesManager.ListOfArticlesSetExento));
+
+                if (result.Item1)
+                {
+                    resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.EXITOSA, task_status_local_message = result.Item2 });
+                    System.Windows.MessageBox.Show("Tarea Ejecutada Exitosamente", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = result.Item2 });
+                    System.Windows.MessageBox.Show(result.Item2, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (resultSetStatus.Item1)
+                {
+                    UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.CERRADA, System.Windows.Media.Brushes.Black);
+                }
+                else
+                {
+                    Logger.WriteToLog(resultSetStatus.Item2);
+                    UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+                    System.Windows.MessageBox.Show("Error al cerrar la tarea, " + resultSetStatus.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                UpdateLabelStatus(labelStatusSetExento, Tasks.EnumTaskStatusTask.ERROR, System.Windows.Media.Brushes.Black);
+
+                resultSetStatus = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = tokenResult.Item2 });
+
+                if (resultSetStatus.Item1)
+                {
+                    System.Windows.MessageBox.Show(tokenResult.Item2 + " Tarea cerrada", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(tokenResult.Item2 + " Adicionalmente Error al cerrar la tarea: " + resultSetStatus.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger.WriteToLog(resultSetStatus.Item2);
+                }
+            }
+
+            buttonSolicitudeSetExento.IsEnabled = true;
+            textBoxUploadTextSetExento.Text = string.Empty;
+            buttonUploadTextSetExento.IsEnabled = true;
+            FilesManager.ListOfArticlesSetExento.Clear();
+            UpdateLabelStatusModeratorMessage(labelMessageSetExento, MODERATOR_MESSAGE_EMPTY);
+        }
+
         //Cerrar las tareas pendientes y las aprobadas.
         private async void Window_Closing(object sender, CancelEventArgs e)
         {
@@ -4574,6 +4920,36 @@ namespace WpfApplicationStoreAuto
                     Logger.WriteToLog(result.Item2);
                 }
             }
+            if (buttonExecuteSetIva.IsEnabled)
+            {
+                buttonExecuteSetIva.IsEnabled = false;
+                Tasks task = (Tasks)buttonExecuteSetIva.Tag;
+                Tuple<bool, string, NetworkClassLibrary.Models.TaskStatusAnswerModel> result = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = messaage_local_status });
+                if (result.Item1)
+                {
+                    ; //Do nothing
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Error al cerrar tarea no ejecutada, ver el logger, " + result.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger.WriteToLog(result.Item2);
+                }
+            }
+            if (buttonExecuteSetExento.IsEnabled)
+            {
+                buttonExecuteSetExento.IsEnabled = false;
+                Tasks task = (Tasks)buttonExecuteSetExento.Tag;
+                Tuple<bool, string, NetworkClassLibrary.Models.TaskStatusAnswerModel> result = await NetworkClassLibrary.Post.SetStatusTask(initialData.IP_WEB_SERVICE + "/api/Task/SetStatusTask", new NetworkClassLibrary.Models.TaskStatusModel { id = task.Id, task_status_id = (int)Tasks.EnumTaskStatusTask.CERRADA, task_status_local = (int)Tasks.EnumTaskStatusLocal.FALLIDA, task_status_local_message = messaage_local_status });
+                if (result.Item1)
+                {
+                    ; //Do nothing
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Error al cerrar tarea no ejecutada, ver el logger, " + result.Item2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger.WriteToLog(result.Item2);
+                }
+            }
 
             await Task.Run(() => Thread.Sleep(200));
         }
@@ -4737,5 +5113,9 @@ namespace WpfApplicationStoreAuto
 
             buttonExecuteUpdateDollarOffline.IsEnabled = true;
         }
+
+        
+
+        
     }
 }

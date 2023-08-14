@@ -14,6 +14,8 @@ namespace FilesManagerClassLibrary
         public static List<Tuple<string,string>> ListUpdateArticleCommaDiscountUpdateArticlesDiscounts = new List<Tuple<string, string>>();
         public static List<Tuple<string,string>> ListUpdateArticleCommaGenderUpdateArticlesGenders = new List<Tuple<string, string>>();
         public static List<Tuple<string,string>> ListUpdateArticleCommaCategoryUpdateArticlesCategories = new List<Tuple<string, string>>();
+        public static List<string> ListOfArticlesSetIva = new List<string>();
+        public static List<string> ListOfArticlesSetExento = new List<string>();
 
         public static string GetPathFileDialog()
         {
